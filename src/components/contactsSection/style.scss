@@ -1,4 +1,28 @@
-.contacts-section{
-    border: 1px solid gray;
-    flex: 2;
+.contacts-section {
+  border: 1px solid gray;
+  flex: 2;
+
+  .contacts-header {
+    font-weight: bold;
+    height: 40px;
+    border-bottom: 1px solid black;
+    text-align: center;
+    padding-top: 13px;
+    box-sizing: border-box;
+  }
+  .contact-item {
+    text-align: center;
+    padding: 20px;
+    cursor: pointer;
+    background-color: antiquewhite;
+    border-bottom: 1px solid white;
+
+    &:active {
+      background-color: white;
+    }
+
+    &:current {
+      background-color: aliceblue;
+    }
+  }
 }

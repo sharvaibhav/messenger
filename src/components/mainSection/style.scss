@@ -9,26 +9,9 @@
   }
   .message-logs {
     flex: 8;
-    padding-left: 10px;
     padding-top: 20px;
     overflow-y: auto;
-    max-height: 440px;
-
-    .chat-line {
-      display: flex;
-      font-size: 16px;
-      height: 30px;
-
-      .user-name {
-        flex: 1;
-        font-weight: bold;
-      }
-
-      .message-line {
-        padding-left: 10px;
-        flex: 14;
-      }
-    }
+    max-height: 400px;
   }
 
   .message-editor form {

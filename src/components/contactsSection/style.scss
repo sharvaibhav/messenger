@@ -1,6 +1,8 @@
 .contacts-section {
   border: 1px solid gray;
   flex: 2;
+  display: flex;
+  flex-direction: column;
 
   .contacts-header {
     font-weight: bold;
@@ -14,15 +16,19 @@
     text-align: center;
     padding: 20px;
     cursor: pointer;
-    background-color: antiquewhite;
+    background-color: lightskyblue;
     border-bottom: 1px solid white;
 
-    &:active {
-      background-color: white;
+    &:visited {
+      color: green;
     }
 
-    &:current {
-      background-color: aliceblue;
+    &:hover {
+      background-color: lightsteelblue;
+    }
+
+    &:active {
+      color: blue;
     }
   }
 }

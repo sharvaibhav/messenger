@@ -1,29 +1,33 @@
-import React, { useState } from "react";
-
-import { selectUser } from "../../actions/simpleaction";
+import React from "react";
+import PropTypes from "prop-types";
+import { selectUser } from "../../actions/messengerActions";
 import { connect } from "react-redux";
 
 import "./style.scss";
 
-export const ContactsSection = props => {
-  const onUserClickHandler = user => {
-    props.selectUser(user);
-  };
+export const ContactsSection = ({ allUsers, selectUser }) => (
+  <div className="contacts-section">
+    <div className="contacts-header"> Contacts </div>
+    {allUsers.map((user, index) => (
+      <button
+        className="contact-item"
+        key={index}
+        onClick={() => selectUser(user)}
+      >
+        {user.name}
+      </button>
+    ))}
+  </div>
+);
 
-  return (
-    <div className="contacts-section">
-      <div className="contacts-header"> Contacts </div>
-      {props.allUsers.map((user, index) => (
-        <div
-          className="contact-item"
-          key={index}
-          onClick={() => onUserClickHandler(user)}
-        >
-          {user.name}
-        </div>
-      ))}
-    </div>
-  );
+ContactsSection.propTypes = {
+  allUsers: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      userId: PropTypes.number
+    })
+  ),
+  selectUser: PropTypes.func
 };
 
 const mapStateToProps = state => {

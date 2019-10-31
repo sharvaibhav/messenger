@@ -1,4 +1,12 @@
-const initialState = {};
+const initialState = {
+  ["0,3"]: [
+    {
+      name: "henry",
+      message: "hello my name is not known to you but iam Henry"
+    },
+    { name: "shaun", message: "lets play this game" }
+  ]
+};
 
 export default (state = initialState, action) => {
   switch (action.type) {

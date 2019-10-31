@@ -1,0 +1,28 @@
+.chat-line {
+  display: flex;
+  font-size: 16px;
+  height: 30px;
+  padding-left: 10px;
+  padding-top: 15px;
+  background-color: lightgrey;
+  flex-direction: row-reverse;
+  border-bottom: 1px solid gray;
+  &.left {
+    flex-direction: row;
+    background-color: ghostwhite;
+  }
+  .user-name {
+    flex: 1;
+    font-weight: bold;
+  }
+
+  .message-line {
+    padding-left: 10px;
+    flex: 14;
+    text-align: end;
+    padding-right: 16px;
+    &.left {
+      text-align: start;
+    }
+  }
+}

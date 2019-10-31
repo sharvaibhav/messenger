@@ -1,29 +1,33 @@
 import React from "react";
-import { updateMessageHistory } from "../../actions/simpleaction";
+import PropTypes from "prop-types";
+import { updateMessageHistory } from "../../actions/messengerActions";
 import { connect } from "react-redux";
 import { getRandomSentence } from "../../getRandomSentence";
+
+import ChatLine from "../chatLine/chatLine";
+import ChatInputSection from "../chatInputSection/chatInputSection";
 import "./style.scss";
 
-export const MainSection = props => {
+export const MainSection = ({
+  updateMessageHistory,
+  currentUser,
+  remoteUser,
+  messages
+}) => {
   const onMessageSendHandler = event => {
     const messageValue = event.target[0].value;
     event.preventDefault();
-    props.updateMessageHistory(
-      props.currentUser.userId,
-      props.remoteUser.userId,
-      { message: messageValue, name: props.currentUser.name }
-    );
+    updateMessageHistory(currentUser.userId, remoteUser.userId, {
+      message: messageValue,
+      name: currentUser.name
+    });
 
     setTimeout(
       () =>
-        props.updateMessageHistory(
-          props.currentUser.userId,
-          props.remoteUser.userId,
-          {
-            message: getRandomSentence(),
-            name: props.remoteUser.name
-          }
-        ),
+        updateMessageHistory(currentUser.userId, remoteUser.userId, {
+          message: getRandomSentence(),
+          name: remoteUser.name
+        }),
       1000
     );
     event.target[0].value = "";
@@ -32,30 +36,40 @@ export const MainSection = props => {
   return (
     <div className="main-section">
       <div className="header">
-        {" "}
-        <strong>{props.currentUser.name.toUpperCase()} </strong> is talking to{" "}
-        <strong>{props.remoteUser.name.toUpperCase()}</strong>
-      </div>{" "}
+        <strong>{currentUser.name.toUpperCase()} </strong> is talking to{" "}
+        <strong>{remoteUser.name.toUpperCase()}</strong>
+      </div>
       <div className="message-logs">
-        {props.messages.map((message, index) => (
-          <div key={index} className="chat-line">
-            <div className="user-name">{message.name}</div>
-            <div className="message-line">{message.message}</div>
-          </div>
+        {messages.map((message, index) => (
+          <ChatLine
+            key={index}
+            message={message}
+            left={message.name === currentUser.name}
+          />
         ))}
       </div>
       <div className="message-editor">
-        <form onSubmit={onMessageSendHandler}>
-          <div className="text-section">
-            <input type="text" />
-          </div>
-          <div className="send-button">
-            <button type="submit">Send</button>{" "}
-          </div>
-        </form>
+        <ChatInputSection onSubmitHandler={onMessageSendHandler} />
       </div>
     </div>
   );
+};
+
+MainSection.propTypes = {
+  currentUser: PropTypes.shape({
+    userId: PropTypes.number,
+    name: PropTypes.string
+  }),
+  remoteUser: PropTypes.shape({
+    userId: PropTypes.number,
+    name: PropTypes.string
+  }),
+  messages: PropTypes.arrayOf(
+    PropTypes.shape({
+      message: PropTypes.string,
+      name: PropTypes.string
+    })
+  )
 };
 
 const mapStateToProps = state => {

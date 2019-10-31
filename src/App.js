@@ -1,19 +1,11 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { simpleAction } from './actions/simpleaction';
+import React, { Component } from "react";
 
-import  ContactsSection  from "./components/contactsSection/contactsSection";
-import  MainSection  from "./components/mainSection/mainSection";
+import ContactsSection from "./components/contactsSection/contactsSection";
+import MainSection from "./components/mainSection/mainSection";
 
-import './App.scss';
-
+import "./App.scss";
 
 class App extends Component {
-
-  simpleAction = (event) => {
-    this.props.simpleAction();
-  }
-
   render() {
     return (
       <div className="App">
@@ -24,12 +16,4 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ...state
-})
-
-const mapDispatchToProps = dispatch => ({
-  simpleAction: () => dispatch(simpleAction())
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

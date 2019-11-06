@@ -1,6 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { updateMessageHistory } from "../../actions/messengerActions";
+import {
+  updateMessageHistory,
+  updateDraftMessage,
+  clearDraft
+} from "../../actions/messengerActions";
 import { connect } from "react-redux";
 import { getRandomSentence } from "../../getRandomSentence";
 
@@ -12,16 +16,20 @@ export const MainSection = ({
   updateMessageHistory,
   currentUser,
   remoteUser,
-  messages
+  messages,
+  updateDraftMessage,
+  draft,
+  clearDraft
 }) => {
   const onMessageSendHandler = event => {
-    const messageValue = event.target[0].value;
+    const messageValue = draft;
     event.preventDefault();
+    if (!messageValue) return null;
     updateMessageHistory(currentUser.userId, remoteUser.userId, {
-      message: messageValue,
+      message: draft,
       name: currentUser.name
     });
-
+    clearDraft(currentUser.userId, remoteUser.userId);
     setTimeout(
       () =>
         updateMessageHistory(currentUser.userId, remoteUser.userId, {
@@ -30,7 +38,13 @@ export const MainSection = ({
         }),
       1000
     );
-    event.target[0].value = "";
+    event.target[0].value = draft;
+  };
+
+  const onUpdateDraftMessage = event => {
+    console.log("in");
+    const draft = event.target.value;
+    updateDraftMessage(currentUser.userId, remoteUser.userId, draft);
   };
 
   return (
@@ -40,6 +54,7 @@ export const MainSection = ({
         <strong>{remoteUser.name.toUpperCase()}</strong>
       </div>
       <div className="message-logs">
+        {console.log(messages)}
         {messages.map((message, index) => (
           <ChatLine
             key={index}
@@ -49,7 +64,12 @@ export const MainSection = ({
         ))}
       </div>
       <div className="message-editor">
-        <ChatInputSection onSubmitHandler={onMessageSendHandler} />
+        <ChatInputSection
+          initValue={draft}
+          remoteUser={remoteUser}
+          onSubmitHandler={onMessageSendHandler}
+          updateDraftHandler={onUpdateDraftMessage}
+        />
       </div>
     </div>
   );
@@ -75,20 +95,29 @@ MainSection.propTypes = {
 const mapStateToProps = state => {
   const currentUser = state.usersReducer.currentUser;
   const remoteUser = state.usersReducer.remoteUser;
-  const messages = state.messageReducer[[currentUser.userId, remoteUser.userId]]
-    ? [...state.messageReducer[[currentUser.userId, remoteUser.userId]]]
-    : [];
+  const messageObject = state.messageReducer[
+    [currentUser.userId, remoteUser.userId]
+  ]
+    ? state.messageReducer[[currentUser.userId, remoteUser.userId]]
+    : { messages: [], draft: "" };
+  const messages = [...messageObject.messages];
+  const draft = messageObject.draft;
 
   return {
     currentUser: currentUser,
     remoteUser: remoteUser,
-    messages: messages
+    messages: messages,
+    draft: draft
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   updateMessageHistory: (userId, remoteUserId, message) =>
-    dispatch(updateMessageHistory(userId, remoteUserId, message))
+    dispatch(updateMessageHistory(userId, remoteUserId, message)),
+  updateDraftMessage: (userId, remoteUserId, message) =>
+    dispatch(updateDraftMessage(userId, remoteUserId, message)),
+  clearDraft: (userId, remoteUserId) =>
+    dispatch(clearDraft(userId, remoteUserId))
 });
 
 export default connect(
